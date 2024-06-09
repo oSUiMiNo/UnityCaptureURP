@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6563411801826974942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d182d1c1ad8a6ce4caefa1926e83170f, type: 3}
+  m_Name: UnityCaptureURP_RendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  WebCamName: WebCam
+  CaptureDevice: 0
+  ResizeMode: 0
+  Timeout: 1000
+  MirrorMode: 0
+  DoubleBuffering: 0
+  EnableVSync: 0
+  TargetFrameRate: 60
 --- !u!114 &-1878332245247344467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,8 +74,8 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  - {fileID: 1747377920696684869}
-  m_RendererFeatureMap: adc0de57c6d2eee545917cfbf5ee3f18
+  - {fileID: -6563411801826974942}
+  m_RendererFeatureMap: adc0de57c6d2eee522237f9dbd13eaa4
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -110,7 +131,7 @@ MonoBehaviour:
   m_Name: WebCamRenderFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  WebCam: {fileID: 7695406025635868433, guid: 16d383fd0c687124b82b72cb1105e373, type: 3}
+  WebCamName: WebCam
   CaptureDevice: 0
   ResizeMode: 0
   Timeout: 1000
@@ -131,7 +152,7 @@ MonoBehaviour:
   m_Name: CustomRenderFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  WebCam: {fileID: 0}
+  WebCamName: WebCam
   CaptureDevice: 0
   ResizeMode: 0
   Timeout: 1000

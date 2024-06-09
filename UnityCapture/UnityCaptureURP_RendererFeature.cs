@@ -1,10 +1,14 @@
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
 {
-    [SerializeField] string WebCamName = "WebCam";
+    [SerializeField]
+    [Tooltip("Write the name of the Camera Gameobject you want to output video as a virtual webcam.")]
+    string WebCamName = "WebCam";
     static GameObject WebCam;
     static RenderTexture RenderTexture;
     static Interface CaptureInterface;
@@ -33,14 +37,14 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques
         };
 
+
 #if UNITY_EDITOR
         if (!UnityEditor.EditorApplication.isPlaying) return;
 #endif
+
         WebCam = GameObject.Find(WebCamName);
         RenderTexture = WebCam.GetComponent<Camera>().targetTexture;
         CaptureInterface = new Interface(CaptureDevice);
-
-        Debug.Log(RenderTexture);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -48,15 +52,18 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(m_ScriptablePass);
     }
 
-
-
+    
     class UnityCaptureURP_RenderPass : ScriptableRenderPass
     {
+        bool waitedFirstFrame = false;
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
 #if UNITY_EDITOR
             if (!UnityEditor.EditorApplication.isPlaying) return;
 #endif
+
+            // The first frame violates [ERROR_PARAMETER] for some reason, so the first frame should go through.
+            if (!waitedFirstFrame) { waitedFirstFrame = true; return; }
 
             // RenderTexture is flipped left and right.
             // Therefore, by setting [EMirrorMode] to [MirrorHorizontally], it is flipped left and right again and sent.
@@ -73,7 +80,6 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
                 case ECaptureSendResult.ERROR_INVALIDCAPTUREINSTANCEPTR: Debug.LogError("[UnityCapture] Invalid Capture Instance Pointer"); break;
             }
         }
-
     }
 
 

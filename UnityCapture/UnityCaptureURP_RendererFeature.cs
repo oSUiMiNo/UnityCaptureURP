@@ -58,7 +58,7 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
 
             switch (CaptureInterface.SendTexture(RenderTexture))
             {
-                case ECaptureSendResult.SUCCESS: if (!HideWarnings) Debug.Log($"[UnityCapture] SUCCESS"); break;
+                case ECaptureSendResult.SUCCESS: break;
                 case ECaptureSendResult.WARNING_FRAMESKIP: if (!HideWarnings) Debug.LogWarning("[UnityCapture] Capture device did skip a frame read, capture frame rate will not match render frame rate."); break;
                 case ECaptureSendResult.WARNING_CAPTUREINACTIVE: if (!HideWarnings) Debug.LogWarning("[UnityCapture] Capture device is inactive"); break;
                 case ECaptureSendResult.ERROR_UNSUPPORTEDGRAPHICSDEVICE: Debug.LogError("[UnityCapture] Unsupported graphics device (only D3D11 supported)"); break;

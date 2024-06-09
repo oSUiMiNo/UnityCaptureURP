@@ -39,6 +39,8 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
         WebCam = GameObject.Find(WebCamName);
         RenderTexture = WebCam.GetComponent<Camera>().targetTexture;
         CaptureInterface = new Interface(CaptureDevice);
+
+        Debug.Log(RenderTexture);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -56,7 +58,9 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
             if (!UnityEditor.EditorApplication.isPlaying) return;
 #endif
 
-            switch (CaptureInterface.SendTexture(RenderTexture))
+            // RenderTexture is flipped left and right.
+            // Therefore, by setting [EMirrorMode] to [MirrorHorizontally], it is flipped left and right again and sent.
+            switch (CaptureInterface.SendTexture(RenderTexture, 1000, false, EResizeMode.Disabled, EMirrorMode.MirrorHorizontally))
             {
                 case ECaptureSendResult.SUCCESS: break;
                 case ECaptureSendResult.WARNING_FRAMESKIP: if (!HideWarnings) Debug.LogWarning("[UnityCapture] Capture device did skip a frame read, capture frame rate will not match render frame rate."); break;
@@ -69,6 +73,7 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
                 case ECaptureSendResult.ERROR_INVALIDCAPTUREINSTANCEPTR: Debug.LogError("[UnityCapture] Invalid Capture Instance Pointer"); break;
             }
         }
+
     }
 
 

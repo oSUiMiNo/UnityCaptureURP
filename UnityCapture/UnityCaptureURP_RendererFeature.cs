@@ -25,7 +25,7 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
     [SerializeField][Tooltip("Introduce a frame of latency in favor of frame rate")] public bool DoubleBuffering = false;
     [SerializeField][Tooltip("Check to enable VSync during capturing")] public bool EnableVSync = false;
     [SerializeField][Tooltip("Set the desired render target frame rate")] public int TargetFrameRate = 60;
-    [SerializeField][Tooltip("Check to disable output of warnings")] public static bool HideWarnings = false;
+    [SerializeField][Tooltip("Check to disable output of warnings")] public bool HideWarnings = false;
 
 
 
@@ -34,7 +34,8 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
     {
         m_ScriptablePass = new UnityCaptureURP_RenderPass
         {
-            renderPassEvent = RenderPassEvent.AfterRenderingOpaques
+            renderPassEvent = RenderPassEvent.AfterRenderingOpaques,
+            HideWarnings = HideWarnings
         };
 
 
@@ -55,6 +56,7 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
     
     class UnityCaptureURP_RenderPass : ScriptableRenderPass
     {
+        public bool HideWarnings = false;
         bool waitedFirstFrame = false;
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {

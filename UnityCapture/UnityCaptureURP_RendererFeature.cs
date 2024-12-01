@@ -32,6 +32,11 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
     UnityCaptureURP_RenderPass m_ScriptablePass;
     public override void Create()
     {
+        WebCam = GameObject.Find(WebCamName);
+        if (WebCam == null) return;
+        RenderTexture = WebCam.GetComponent<Camera>().targetTexture;
+        if (RenderTexture == null) return;
+
         m_ScriptablePass = new UnityCaptureURP_RenderPass
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques,
@@ -43,17 +48,23 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
         if (!UnityEditor.EditorApplication.isPlaying) return;
 #endif
 
-        WebCam = GameObject.Find(WebCamName);
-        RenderTexture = WebCam.GetComponent<Camera>().targetTexture;
         CaptureInterface = new Interface(CaptureDevice);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
+        if (m_ScriptablePass == null) return;
         renderer.EnqueuePass(m_ScriptablePass);
     }
 
-    
+    public void Close()
+    {
+        if (CaptureInterface == null) return;
+        CaptureInterface.Close();
+        CaptureInterface = null;
+    }
+
+
     class UnityCaptureURP_RenderPass : ScriptableRenderPass
     {
         public bool HideWarnings = false;
@@ -63,7 +74,7 @@ public class UnityCaptureURP_RendererFeature : ScriptableRendererFeature
 #if UNITY_EDITOR
             if (!UnityEditor.EditorApplication.isPlaying) return;
 #endif
-
+            if (CaptureInterface == null) return;
             // The first frame violates [ERROR_PARAMETER] for some reason, so the first frame should go through.
             if (!waitedFirstFrame) { waitedFirstFrame = true; return; }
 
